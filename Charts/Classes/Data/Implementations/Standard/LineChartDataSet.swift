@@ -102,6 +102,11 @@ public class LineChartDataSet: LineRadarChartDataSet, ILineChartDataSet
         circleColors.removeAll(keepCapacity: false)
     }
     
+    public var drawImageEnabled = true
+    public var isDrawImageEnabled : Bool { return drawImageEnabled }
+    public var image : UIImage?
+    public var imageSize : CGSize = CGSize()
+    
     /// If true, drawing circles is enabled
     public var drawCirclesEnabled = true
     

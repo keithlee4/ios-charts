@@ -56,6 +56,17 @@ public protocol ILineChartDataSet: ILineRadarChartDataSet
     /// The color of the inner circle (the circle-hole).
     var circleHoleColor: UIColor { get set }
     
+    /// True if drawing images for this DataSet is enabled, false if not
+    var drawImageEnabled: Bool { get set }
+
+    var isDrawImageEnabled: Bool { get }
+    
+    /// Image to render on context
+    var image: UIImage? { get set }
+    
+    /// Size of image to render on context
+    var imageSize: CGSize { get set }
+    
     /// True if drawing circles for this DataSet is enabled, false if not
     var drawCircleHoleEnabled: Bool { get set }
     

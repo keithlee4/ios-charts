@@ -523,7 +523,7 @@ public class LineChartRenderer: LineScatterCandleRadarChartRenderer
         {
             guard let dataSet = lineData.getDataSetByIndex(i) as? ILineChartDataSet else { continue }
             
-            if !dataSet.isVisible || !dataSet.isDrawCirclesEnabled || dataSet.entryCount == 0
+            if !dataSet.isVisible || (!dataSet.isDrawCirclesEnabled && !dataSet.isDrawImageEnabled) || dataSet.entryCount == 0
             {
                 continue
             }
@@ -532,12 +532,6 @@ public class LineChartRenderer: LineScatterCandleRadarChartRenderer
             let valueToPixelMatrix = trans.valueToPixelMatrix
             
             let entryCount = dataSet.entryCount
-            
-            let circleRadius = dataSet.circleRadius
-            let circleDiameter = circleRadius * 2.0
-            let circleHoleDiameter = circleRadius
-            let circleHoleRadius = circleHoleDiameter / 2.0
-            let isDrawCircleHoleEnabled = dataSet.isDrawCircleHoleEnabled
             
             guard let
                 entryFrom = dataSet.entryForXIndex(self.minX),
@@ -569,21 +563,40 @@ public class LineChartRenderer: LineScatterCandleRadarChartRenderer
                 
                 CGContextSetFillColorWithColor(context, dataSet.getCircleColor(j)!.CGColor)
                 
-                rect.origin.x = pt.x - circleRadius
-                rect.origin.y = pt.y - circleRadius
-                rect.size.width = circleDiameter
-                rect.size.height = circleDiameter
-                CGContextFillEllipseInRect(context, rect)
-                
-                if (isDrawCircleHoleEnabled)
+                if dataSet.isDrawImageEnabled
                 {
-                    CGContextSetFillColorWithColor(context, dataSet.circleHoleColor.CGColor)
+                    if let image = dataSet.image
+                    {
+                        let imageSize = dataSet.imageSize
+                        rect.origin.x = pt.x - imageSize.width/2
+                        rect.origin.y = pt.y - imageSize.height/2
+                        rect.size = imageSize
+                        CGContextDrawImage(context, rect, image.CGImage)
+                    }
+                }else
+                {
+                    let circleRadius = dataSet.circleRadius
+                    let circleDiameter = circleRadius * 2.0
+                    let circleHoleDiameter = circleRadius
+                    let circleHoleRadius = circleHoleDiameter / 2.0
+                    let isDrawCircleHoleEnabled = dataSet.isDrawCircleHoleEnabled
                     
-                    rect.origin.x = pt.x - circleHoleRadius
-                    rect.origin.y = pt.y - circleHoleRadius
-                    rect.size.width = circleHoleDiameter
-                    rect.size.height = circleHoleDiameter
+                    rect.origin.x = pt.x - circleRadius
+                    rect.origin.y = pt.y - circleRadius
+                    rect.size.width = circleDiameter
+                    rect.size.height = circleDiameter
                     CGContextFillEllipseInRect(context, rect)
+                    
+                    if (isDrawCircleHoleEnabled)
+                    {
+                        CGContextSetFillColorWithColor(context, dataSet.circleHoleColor.CGColor)
+                        
+                        rect.origin.x = pt.x - circleHoleRadius
+                        rect.origin.y = pt.y - circleHoleRadius
+                        rect.size.width = circleHoleDiameter
+                        rect.size.height = circleHoleDiameter
+                        CGContextFillEllipseInRect(context, rect)
+                    }
                 }
             }
         }
