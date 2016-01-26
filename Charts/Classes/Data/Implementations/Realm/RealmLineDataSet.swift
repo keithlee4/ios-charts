@@ -53,6 +53,12 @@ public class RealmLineDataSet: RealmLineRadarDataSet, ILineChartDataSet
         }
     }
     
+    public var drawImageEnabled = true
+    public var isDrawImageEnabled : Bool { return drawImageEnabled }
+    public var image : UIImage?
+    public var imageSize : CGSize = CGSize()
+    
+    
     /// If true, cubic lines are drawn instead of linear
     public var drawCubicEnabled = false
     
