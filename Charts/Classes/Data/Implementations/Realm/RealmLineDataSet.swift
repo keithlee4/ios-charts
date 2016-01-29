@@ -56,6 +56,7 @@ public class RealmLineDataSet: RealmLineRadarDataSet, ILineChartDataSet
     public var drawImageEnabled = true
     public var isDrawImageEnabled : Bool { return drawImageEnabled }
     public var image : UIImage?
+    public var images: [UIImage]?
     public var imageSize : CGSize = CGSize()
     
     
