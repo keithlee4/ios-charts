@@ -565,14 +565,19 @@ public class LineChartRenderer: LineScatterCandleRadarChartRenderer
                 
                 if dataSet.isDrawImageEnabled
                 {
-                    if let image = dataSet.image
-                    {
-                        let imageSize = dataSet.imageSize
-                        rect.origin.x = pt.x - imageSize.width/2
-                        rect.origin.y = pt.y - imageSize.height/2
-                        rect.size = imageSize
-                        CGContextDrawImage(context, rect, image.CGImage)
+                    var image: UIImage?
+                    if let images = dataSet.images{
+                        image = images[j]
+                    }else{
+                        image = dataSet.image
                     }
+                    
+                    
+                    let imageSize = dataSet.imageSize
+                    rect.origin.x = pt.x - imageSize.width/2
+                    rect.origin.y = pt.y - imageSize.height/2
+                    rect.size = imageSize
+                    CGContextDrawImage(context, rect, image!.CGImage)
                 }else
                 {
                     let circleRadius = dataSet.circleRadius
@@ -659,7 +664,7 @@ public class LineChartRenderer: LineScatterCandleRadarChartRenderer
             trans?.pointValueToPixel(&_highlightPointBuffer)
             
             // draw the lines
-            drawHighlightLines(context: context, point: _highlightPointBuffer, set: set)
+            //drawHighlightLines(context: context, point: _highlightPointBuffer, set: set)
         }
         
         CGContextRestoreGState(context)

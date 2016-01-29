@@ -16,18 +16,51 @@ import UIKit
 
 public class ChartMarker: ChartComponentBase
 {
+    private var _size : CGSize!
+    private var _sizes: [CGSize]!
+    
+    public var images: [UIImage]?{
+        willSet(imgs){
+            guard imgs != nil else{
+                return
+            }
+            
+            _sizes = []
+            for img in imgs!{
+                _sizes.append(img.size)
+            }
+        }
+    }
+    
     /// The marker image to render
-    public var image: UIImage?
+    public var image: UIImage?{
+        didSet{
+            _size = image?.size
+        }
+    }
     
     /// Use this to return the desired offset you wish the MarkerView to have on the x-axis.
     public var offset: CGPoint = CGPoint()
     
     /// The marker's size
     public var size: CGSize
-    {
+        {
         get
         {
-            return image!.size
+            return _size
+        }
+        
+        set(newSize)
+        {
+            _size = newSize
+        }
+    }
+    
+    public var sizes: [CGSize]{
+        get{
+            return _sizes
+        }set(newSizes){
+            _sizes = newSizes
         }
     }
     
@@ -51,7 +84,7 @@ public class ChartMarker: ChartComponentBase
         let offset = self.offsetForDrawingAtPos(point)
         let size = self.size
         
-        let rect = CGRect(x: point.x + offset.x, y: point.y + offset.y, width: size.width, height: size.height)
+        let rect = CGRect(x: point.x + offset.x - size.width/2, y: point.y + offset.y - size.height/2, width: size.width, height: size.height)
         
         UIGraphicsPushContext(context)
         image!.drawInRect(rect)
@@ -64,5 +97,9 @@ public class ChartMarker: ChartComponentBase
     public func refreshContent(entry entry: ChartDataEntry, highlight: ChartHighlight)
     {
         // Do nothing here...
+        if let images = self.images{
+            self.image = images[entry.xIndex]
+            self.size = self.sizes[entry.xIndex]
+        }
     }
 }

@@ -64,6 +64,8 @@ public protocol ILineChartDataSet: ILineRadarChartDataSet
     /// Image to render on context
     var image: UIImage? { get set }
     
+    var images: [UIImage]? { get set }
+    
     /// Size of image to render on context
     var imageSize: CGSize { get set }
     
